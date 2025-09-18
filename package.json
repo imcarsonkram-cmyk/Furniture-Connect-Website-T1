@@ -1,0 +1,35 @@
+{
+  "name": "furniture-connect-website-t1",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Accountless drop-and-log furniture diversion MVP built with a Next.js-inspired architecture.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && tsc",
+    "start": "next start",
+    "test": "npm run build && node --test dist/tests/**/*.js",
+    "lint": "node scripts/lint-stub.js",
+    "format": "node scripts/format-stub.js",
+    "dev:stub": "node scripts/dev-stub.js"
+  },
+  "keywords": [
+    "furniture",
+    "diversion",
+    "mvp"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "next": "^14.2.32",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.1",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}

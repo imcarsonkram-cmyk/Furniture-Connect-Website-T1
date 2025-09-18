@@ -1,0 +1,20 @@
+/* Minimal globals.css to satisfy layout import and allow Next to compile. */
+:root {
+  --bg: #fff;
+  --text: #111;
+  --muted: #666;
+}
+html, body, #__next {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.muted { color: var(--muted); }
+.button { display: inline-block; padding: 8px 12px; background: #0366d6; color: #fff; border-radius: 4px; text-decoration: none; }
+.button-secondary { background: #f3f4f6; color: #111; border: 1px solid #ddd; }
+.card { padding: 16px; border: 1px solid #eee; border-radius: 6px; }
+.cta-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 12px; }

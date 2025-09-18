@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Category {
+  SOFA
+  DESK
+  CHAIR
+  TABLE
+  MICROWAVE
+  MINI_FRIDGE
+  MATTRESS
+  MISC
+}
+
+enum Condition {
+  WORKS
+  UNKNOWN
+  BROKEN
+}
+
+enum SizeHint {
+  HAND_CARRY
+  TWO_PERSON
+  TRUCK
+}
+
+model Campus {
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  name          String
+  acceptanceJson Json
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  dropSpots     DropSpot[]
+}
+
+model DropSpot {
+  id          String   @id @default(cuid())
+  campusId    String
+  campus      Campus   @relation(fields: [campusId], references: [id])
+  name        String
+  lat         Float
+  lng         Float
+  accessNotes String?
+  active      Boolean  @default(true)
+  qrCodeId    String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  listings    Listing[]
+}
+
+model Listing {
+  id            String     @id @default(cuid())
+  campusId      String?
+  campus        Campus?    @relation(fields: [campusId], references: [id])
+  dropSpotId    String?
+  dropSpot      DropSpot?  @relation(fields: [dropSpotId], references: [id])
+  lat           Float?
+  lng           Float?
+  locationText  String
+  category      Category
+  condition     Condition
+  sizeHint      SizeHint
+  notes         String?
+  photos        Json
+  status        String     @default("active")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  expiresAt     DateTime
+  notifyEmail   String?
+  notifyPhone   String?
+  notifyConsent Boolean    @default(false)
+  notifySentAt  DateTime?
+  signals       Signal[]
+}
+
+model Signal {
+  id         String   @id @default(cuid())
+  listingId  String
+  listing    Listing  @relation(fields: [listingId], references: [id])
+  type       String
+  source     String
+  createdAt  DateTime @default(now())
+}
+
+model RouteBatch {
+  id          String   @id @default(cuid())
+  listingIds  String
+  orgHint     String?
+  createdAt   DateTime @default(now())
+}

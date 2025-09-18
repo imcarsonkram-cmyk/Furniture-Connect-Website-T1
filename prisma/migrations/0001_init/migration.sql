@@ -1,0 +1,63 @@
+-- Prisma migration stub for offline environment
+CREATE TABLE IF NOT EXISTS "Campus" (
+  "id" TEXT PRIMARY KEY,
+  "slug" TEXT UNIQUE NOT NULL,
+  "name" TEXT NOT NULL,
+  "acceptanceJson" JSONB NOT NULL,
+  "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS "DropSpot" (
+  "id" TEXT PRIMARY KEY,
+  "campusId" TEXT NOT NULL REFERENCES "Campus"("id") ON DELETE CASCADE,
+  "name" TEXT NOT NULL,
+  "lat" DOUBLE PRECISION NOT NULL,
+  "lng" DOUBLE PRECISION NOT NULL,
+  "accessNotes" TEXT,
+  "active" BOOLEAN DEFAULT TRUE,
+  "qrCodeId" TEXT UNIQUE NOT NULL,
+  "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TYPE "Category" AS ENUM ('SOFA','DESK','CHAIR','TABLE','MICROWAVE','MINI_FRIDGE','MATTRESS','MISC');
+CREATE TYPE "Condition" AS ENUM ('WORKS','UNKNOWN','BROKEN');
+CREATE TYPE "SizeHint" AS ENUM ('HAND_CARRY','TWO_PERSON','TRUCK');
+
+CREATE TABLE IF NOT EXISTS "Listing" (
+  "id" TEXT PRIMARY KEY,
+  "campusId" TEXT REFERENCES "Campus"("id") ON DELETE SET NULL,
+  "dropSpotId" TEXT REFERENCES "DropSpot"("id") ON DELETE SET NULL,
+  "lat" DOUBLE PRECISION,
+  "lng" DOUBLE PRECISION,
+  "locationText" TEXT NOT NULL,
+  "category" "Category" NOT NULL,
+  "condition" "Condition" NOT NULL,
+  "sizeHint" "SizeHint" NOT NULL,
+  "notes" TEXT,
+  "photos" JSONB NOT NULL,
+  "status" TEXT NOT NULL DEFAULT 'active',
+  "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  "expiresAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+  "notifyEmail" TEXT,
+  "notifyPhone" TEXT,
+  "notifyConsent" BOOLEAN DEFAULT FALSE,
+  "notifySentAt" TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS "Signal" (
+  "id" TEXT PRIMARY KEY,
+  "listingId" TEXT NOT NULL REFERENCES "Listing"("id") ON DELETE CASCADE,
+  "type" TEXT NOT NULL,
+  "source" TEXT NOT NULL,
+  "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS "RouteBatch" (
+  "id" TEXT PRIMARY KEY,
+  "listingIds" TEXT NOT NULL,
+  "orgHint" TEXT,
+  "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
