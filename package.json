@@ -29,7 +29,9 @@
     "helmet": "^7.0.0",
     "cors": "^2.8.5",
     "express-rate-limit": "^7.1.0",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "@vercel/edge": "^1.1.0",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@types/node": "^24.5.1",
